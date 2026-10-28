@@ -28,7 +28,7 @@ jobs:
       - name: Preparar archivos
         run: |
           mkdir -p build
-          cp conversor.py requirements.txt build/
+          cp app.py requirements.txt build/
           cp -r tests build/
 
       - name: Crear ZIP
