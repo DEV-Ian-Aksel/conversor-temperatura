@@ -1,0 +1,43 @@
+
+name: CI - Conversor de temperaturas
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Ejecutar pruebas
+        run: python -m pytest -v
+
+      - name: Preparar archivos
+        run: |
+          mkdir -p build
+          cp conversor.py requirements.txt build/
+          cp -r tests build/
+
+      - name: Crear ZIP
+        run: |
+          cd build
+          zip -r ../conversor-temperaturas.zip .
+
+      - name: Subir artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: conversor-temperaturas
+          path: conversor-temperaturas.zip
